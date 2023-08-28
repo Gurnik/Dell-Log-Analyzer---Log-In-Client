@@ -7,6 +7,7 @@ import NoPage from "./pages/NoPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -52,6 +53,8 @@ const App = () => {
             element={user ? <Post /> : <Navigate to="/login" />}
           />
           <Route path="*" element={<NoPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
         </Routes>
       </div>
     </BrowserRouter>

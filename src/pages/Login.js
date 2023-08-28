@@ -3,9 +3,16 @@ import Github from "../images/github.png";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useState } from 'react'
+import { Redirect } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 
 const Login = () => {
+
+  const [authenticated, setauthenticated] = useState(
+    localStorage.getItem(localStorage.getItem("authenticated") || false)
+  );
   const [usernameOrEmail, setUserameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const isEmail = (value) => {
@@ -30,16 +37,24 @@ const Login = () => {
       };
     }
     console.log(body)
-    const response = await fetch('http://localhost:3001/login', {
-      method: 'POST',
-      body: JSON.stringify({ body }),
-      type: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    // const response = await fetch('http://localhost:3001/login', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ body }),
+    //   type: 'cors',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // });
+    var response = "success"
     console.log(response);
+
+    if (response === "success") {
+      setauthenticated(true)
+      localStorage.setItem("authenticated", true);
+    }
+    
   };
+
 
   const google = () => {
     window.open("http://localhost:5000/auth/google", "_self");
