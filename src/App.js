@@ -54,6 +54,8 @@ const App = () => {
           />
           <Route path="*" element={<NoPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard/xx" element={<Signup />} /> */}
+
 
         </Routes>
       </div>
