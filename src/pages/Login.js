@@ -1,9 +1,61 @@
 import Google from "../images/google.png";
 import Github from "../images/github.png";
-
 import { Link } from "react-router-dom";
+import React from "react";
+import { useState } from 'react'
+import { Redirect } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+
 
 const Login = () => {
+
+  const [authenticated, setauthenticated] = useState(
+    localStorage.getItem(localStorage.getItem("authenticated") || false)
+  );
+  const [usernameOrEmail, setUserameOrEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const isEmail = (value) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(value);
+  };
+  const submit = async () => {
+    var body = {};
+    console.log(usernameOrEmail)
+    console.log(password)
+    if (isEmail(usernameOrEmail)) {
+      body = {
+        email: usernameOrEmail,
+        username: '',
+        password: password
+      };
+    } else {
+      body = {
+        email: '',
+        username: usernameOrEmail,
+        password: password
+      };
+    }
+    console.log(body)
+    // const response = await fetch('http://localhost:3001/login', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ body }),
+    //   type: 'cors',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // });
+    var response = "success"
+    console.log(response);
+
+    if (response === "success") {
+      setauthenticated(true)
+      localStorage.setItem("authenticated", true);
+    }
+    
+  };
+
+
   const google = () => {
     window.open("http://localhost:5000/auth/google", "_self");
   };
@@ -31,9 +83,15 @@ const Login = () => {
           <div className="or">OR</div>
         </div>
         <div className="right">
-          <input type="text" placeholder="Username" />
-          <input type="password" placeholder="Password" />
-          <button className="submit">Login</button>
+          <input type="text" placeholder="Enter username or email"
+            onChange={(e) => setUserameOrEmail(e.target.value)}
+            value={usernameOrEmail}
+          />
+          <input type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            placeholder="Password" required />
+          <button className="submit" onClick={submit}>Login</button>
           <Link className="link" to="../Signup">
             Sign Up
           </Link>
