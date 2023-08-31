@@ -3,20 +3,22 @@ import Github from "../images/github.png";
 import { Link } from "react-router-dom";
 import React, { Component } from "react";
 // import { Redirect } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from "../context/AuthProvider";
 
 import axios from '../api/axios';
-const LOGIN_URL = '/auth';
+const LOGIN_URL = 'http://localhost:3001/login';
 
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const isEmail = (value) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(value);
   };
-  const {setAuth}  = useContext(AuthContext)
+  const { setAuth } = useContext(AuthContext)
   const userRef = useRef()
   const errRef = useRef()
   // const [authenticated, setauthenticated] = useState(
@@ -35,49 +37,51 @@ const Login = () => {
 
   // const navigate = useNavigate();
 
-  
+
   const submit = async () => {
     var body = {};
+    var email
+    var username
     if (isEmail(usernameOrEmail)) {
-      body = {
-        email: usernameOrEmail,
-        username: '',
-        password: password
-      };
-    } else {
-      body = {
-        email: '',
-        username: usernameOrEmail,
-        password: password
-      };
-    }
-    console.log(body)
-    try{
-      const response = await axios.post(LOGIN_URL)
-        setUserameOrEmail('')
-        setPassword('')
-        setSuccess(true)
-    }
-    catch{
-
-    }
-    // const response = await fetch('http://localhost:3001/login', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ body }),
-    //   type: 'cors',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // });
-    // var response = "success"
-    // console.log(response);
-
-    // if (response === "success") {
-    //   setauthenticated(true)
-    //   localStorage.setItem("authenticated", true);
-    //   navigate('/dashboard');
-    // }
+        email=usernameOrEmail
+        username= ''
     
+    } else {
+
+        email= ''
+        username= usernameOrEmail
+    }
+    try {
+      const response = await axios.post(LOGIN_URL,
+        JSON.stringify({ "email":email,"username":username,"password":password }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+
+        }
+      );
+      console.log(JSON.stringify(response?.data))
+  
+      setUserameOrEmail('')
+      setPassword('')
+      setSuccess(true)
+      navigate('/home')
+
+    }
+    catch (err) {
+      if (!err?.response) {
+        setErrMsg('No Server Response');
+      } else if (err.response?.status === 400) {
+        setErrMsg('Missing Username or Password');
+      } else if (err.response?.status === 401) {
+        setErrMsg('Unauthorized');
+      } else {
+        setErrMsg('Login Failed');
+      }
+      errRef.current.focus();
+    }
+  
+
 
   };
 

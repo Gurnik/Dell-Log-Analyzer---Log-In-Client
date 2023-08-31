@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 
 const App = () => {
+
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -54,6 +55,8 @@ const App = () => {
           />
           <Route path="*" element={<NoPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/home" element={<Home />} />
+
           {/* <Route path="/dashboard/xx" element={<Signup />} /> */}
 
 
