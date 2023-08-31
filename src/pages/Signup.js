@@ -66,7 +66,16 @@ function Sign() {
     ) {
 		errorMessage("Please enter all the fields");
     } else {
-	  navigate('/sub')
+	  navigate('/sub',{
+		state: {
+		  Fname,
+		  Lname,
+		  Uname,
+		  email,
+		  phoneNum,
+		  password
+		}
+	  });
       setError(false);
     }
   };
