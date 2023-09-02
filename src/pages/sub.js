@@ -1,16 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect, memo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../design/sign.css';
-import { useLocation } from 'react-router-dom';
+
+
 
 function Sub() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { Fname, Lname, Uname, email, phoneNum, password } = location.state;
+
 
   const [company, setCompany] = useState('');
   const [sub, setSub] = useState('');
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [isNavigatingBack, setIsNavigatingBack] = useState(false);
+
+  useEffect(() => {
+    if (isNavigatingBack) {
+      console.log('Navigating back detected');
+      navigate('/sub', { replace: true });
+    }
+  }, [isNavigatingBack]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      console.log('Before unload event fired');
+      setIsNavigatingBack(true);
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+  
+  
+
 
   const handleCompany = (e) => {
     setCompany(e.target.value);
@@ -35,7 +63,9 @@ function Sub() {
         Uname,
         email,
         phoneNum,
-        password
+        password,
+        company,
+        sub
       };
 
       fetch(url, {
@@ -48,6 +78,7 @@ function Sub() {
         .then((response) => response.json())
         .then((responseData) => {
           // Handle response from the backend if needed
+          console.log(data)
         })
         .catch((error) => {
           // Handle error
@@ -81,8 +112,17 @@ function Sub() {
       </div>
     );
   };
+  
+  console.log({Fname});
+  console.log({Lname});
+  console.log({Uname});
+  console.log({phoneNum});
+  console.log({email});
+  
+
 
   return (
+    
     <div className="container">
       <center>
         <div>
@@ -125,4 +165,4 @@ function Sub() {
   );
 }
 
-export default Sub;
+export default memo(Sub);

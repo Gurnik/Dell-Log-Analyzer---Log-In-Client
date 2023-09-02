@@ -3,6 +3,37 @@ import { useNavigate } from "react-router-dom";
 import Sub from "./sub";
 import "../design/sign.css";
 
+ // Function to check password strength
+ const checkPasswordStrength = (password) => {
+  const minLength = 8;
+  const minUpperCase = 1;
+  const minLowerCase = 1;
+  const minNumbers = 1;
+  const minSpecialChars = 1;
+
+  if (password.length < minLength) {
+    return 'Password must be at least 8 characters long.';
+  }
+
+  if (password.replace(/[^A-Z]/g, '').length < minUpperCase) {
+    return 'Password must contain at least one uppercase letter.';
+  }
+
+  if (password.replace(/[^a-z]/g, '').length < minLowerCase) {
+    return 'Password must contain at least one lowercase letter.';
+  }
+
+  if (password.replace(/[^0-9]/g, '').length < minNumbers) {
+    return 'Password must contain at least one number.';
+  }
+
+  if (password.replace(/[!@#$%^&()_+\-={}\[\]:;<>,?\\~]/g, '').length < minSpecialChars) {
+    return 'Password must contain at least one special character .';
+  }
+
+  return 'Password is strong!'; // Password meets all criteria
+};
+
 function Sign() {
   // States for registration
   const navigate = useNavigate();
@@ -17,6 +48,12 @@ function Sign() {
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+
+  // State for password strength error message
+  const [passwordStrengthError, setPasswordStrengthError] = useState("");
+
+  // State to store the result of password strength check
+  const [passwordStrength, setPasswordStrength] = useState("");
 
   // Handling the name change
   const handleFName = (e) => {
@@ -44,8 +81,13 @@ function Sign() {
 
   // Handling the password change
   const handlePassword = (e) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
     setSubmitted(false);
+
+    // Check password strength
+    const strengthError = checkPasswordStrength(newPassword);
+    setPasswordStrengthError(strengthError);
   };
 
   const handlePhone = (e) => {
@@ -53,23 +95,32 @@ function Sign() {
     setSubmitted(false);
   };
 
-  // Handling the form submission
-  const next = (e) => {
-    e.preventDefault();
-    if (
-      Fname === "" ||
-      phoneNum === "" ||
-      Lname === "" ||
-      Uname === "" ||
-      email === "" ||
-      password === ""
-    ) {
-		errorMessage("Please enter all the fields");
-    } else {
-	  navigate('/sub')
-      setError(false);
-    }
-  };
+ // Handling the form submission
+ const next = (e) => {
+  e.preventDefault();
+  if (
+    Fname === "" ||
+    phoneNum === "" ||
+    Lname === "" ||
+    Uname === "" ||
+    email === "" ||
+    password === ""
+  ) {
+  errorMessage("Please enter all the fields");
+  } else {
+  navigate('/sub',{
+  state: {
+    Fname,
+    Lname,
+    Uname,
+    email,
+    phoneNum,
+    password
+  }
+  });
+    setError(false);
+  }
+};
 
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
@@ -170,6 +221,13 @@ function Sign() {
             type="password"
           />
           <br></br>
+
+          {/* Display the password strength error */}
+          {passwordStrengthError && (
+            <div className="password error">
+              <div className="password-strength-error">{passwordStrengthError}</div>
+            </div>
+          )}
 
           <label className="label">Confirm password</label>
           <input
