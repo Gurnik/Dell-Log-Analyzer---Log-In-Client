@@ -7,10 +7,10 @@ import '../design/sign.css';
 function Sub() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { Fname, Lname, Uname, email, phoneNum, password } = location.state;
+  const { firstName, lastName, username, email, phoneNumber, password,passwordConfirm } = location.state;
 
 
-  const [company, setCompany] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const [sub, setSub] = useState('');
 
   const [submitted, setSubmitted] = useState(false);
@@ -41,7 +41,7 @@ function Sub() {
 
 
   const handleCompany = (e) => {
-    setCompany(e.target.value);
+    setCompanyName(e.target.value);
     setSubmitted(false);
   };
 
@@ -52,19 +52,20 @@ function Sub() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (company === '' || sub === '') {
+    if (companyName === '' || sub === '') {
       setError('Please enter all the fields');
     } else {
       // Assuming you have a backend URL to send data
       const url = 'http://localhost:3001/signup'; // Replace with your actual backend URL
       const data = {
-        Fname,
-        Lname,
-        Uname,
+        firstName,
+         lastName,
+        username,
         email,
-        phoneNum,
+        phoneNumber,
         password,
-        company,
+        passwordConfirm,
+       companyName,
         sub
       };
 
@@ -95,7 +96,7 @@ function Sub() {
           display: submitted ? '' : 'none',
         }}
       >
-        <h1>User {Fname} {Lname} successfully registered</h1>
+        <h1>User {firstName} {lastName} successfully registered</h1>
       </div>
     );
   };
@@ -113,10 +114,10 @@ function Sub() {
     );
   };
   
-  console.log({Fname});
-  console.log({Lname});
-  console.log({Uname});
-  console.log({phoneNum});
+  console.log({ firstName});
+  console.log({ lastName});
+  console.log({ username});
+  console.log({ phoneNumber});
   console.log({email});
   
 
@@ -143,7 +144,7 @@ function Sub() {
           <input
             onChange={handleCompany}
             className="input"
-            value={company}
+            value={companyName}
             type="text"
           />
           <br />
