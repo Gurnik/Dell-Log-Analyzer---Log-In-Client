@@ -23,6 +23,7 @@
     width: 400px;
   }
   
+  
   /* Style headings */
   h1 {
     font-size: 24px;
@@ -67,5 +68,11 @@
     color: red;
     font-size: 14px;
     margin-top: 10px;
+  }
+  .companyname {
+    border: 1px solid #ccc;
+    width: 200px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
   }
   

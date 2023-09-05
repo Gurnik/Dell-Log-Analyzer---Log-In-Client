@@ -6,16 +6,24 @@ import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+<<<<<<< Updated upstream
 import Sign from "./pages/Signup";
 import Sub from "./pages/sub";
 import Dashboard from "./pages/Dashboard";
+=======
+import Signup from "./pages/Signup";
+import Sign from "./pages/Signup";
+import Sub from "./pages/sub";
+import Dashboard from "./pages/Dashboard";
+import ForgotPassword from "./pages/ForgetPass";
+>>>>>>> Stashed changes
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:5000/auth/login/success", {
+      fetch("http://localhost:3001/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -58,6 +66,14 @@ const App = () => {
           />
           <Route path="*" element={<NoPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+<<<<<<< Updated upstream
+=======
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/home" element={<Home />} />
+
+          {/* <Route path="/dashboard/xx" element={<Signup />} /> */}
+
+>>>>>>> Stashed changes
 
         </Routes>
       </div>
