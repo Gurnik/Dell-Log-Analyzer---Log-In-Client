@@ -3,30 +3,68 @@ import { useNavigate } from "react-router-dom";
 import Sub from "./sub";
 import "../design/sign.css";
 
+
+
+// Function to check password strength
+const checkPasswordStrength = (password) => {
+    const minLength = 6;
+    const minUpperCase = 1;
+    const minLowerCase = 1;
+    const minNumbers = 1;
+
+
+    if (password.length < minLength) {
+        return 'Password must be at least 8 characters long.';
+    }
+
+    if (password.replace(/[^A-Z]/g, '').length < minUpperCase) {
+        return 'Password must contain at least one uppercase letter.';
+    }
+
+    if (password.replace(/[^a-z]/g, '').length < minLowerCase) {
+        return 'Password must contain at least one lowercase letter.';
+    }
+
+    if (password.replace(/[^0-9]/g, '').length < minNumbers) {
+        return 'Password must contain at least one number.';
+    }
+
+
+
+    return 'Password is strong!'; // Password meets all criteria
+};
+
+
 function Sign() {
   // States for registration
   const navigate = useNavigate();
-  const [Fname, setFName] = useState("");
-  const [Lname, setLName] = useState("");
-  const [Uname, setUName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNum, setPhonenun] = useState("");
+  const [phoneNumber, setPhonenun] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
 
-  // Handling the name change
+    // State for password strength error message
+    const [passwordStrengthError, setPasswordStrengthError] = useState("");
+
+    // State to store the result of password strength check
+    const [passwordStrength, setPasswordStrength] = useState("");
+
+    // Handling the name change
   const handleFName = (e) => {
-    setFName(e.target.value);
+    setFirstName(e.target.value);
     setSubmitted(false);
   };
 
   // Handling the name change
   const handleLName = (e) => {
-    setLName(e.target.value);
+    setLastName(e.target.value);
     setSubmitted(false);
   };
 
@@ -44,8 +82,12 @@ function Sign() {
 
   // Handling the password change
   const handlePassword = (e) => {
-    setPassword(e.target.value);
+      const newPassword = e.target.value;
+      setPassword(newPassword);
     setSubmitted(false);
+      // Check password strength
+      const strengthError = checkPasswordStrength(newPassword);
+      setPasswordStrengthError(strengthError);
   };
 
   const handlePhone = (e) => {
@@ -57,10 +99,10 @@ function Sign() {
   const next = (e) => {
     e.preventDefault();
     if (
-      Fname === "" ||
-      phoneNum === "" ||
-      Lname === "" ||
-      Uname === "" ||
+      firstName === "" ||
+      phoneNumber === "" ||
+      lastName === "" ||
+      username === "" ||
       email === "" ||
       password === ""
     ) {
@@ -68,12 +110,13 @@ function Sign() {
     } else {
 	  navigate('/sub',{
 		state: {
-		  Fname,
-		  Lname,
-		  Uname,
+		  firstName,
+		  lastName,
+          username,
 		  email,
-		  phoneNum,
-		  password
+          phoneNumber,
+		  password,
+          passwordConfirm
 		}
 	  });
       setError(false);
@@ -81,7 +124,7 @@ function Sign() {
   };
 
   const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
+    setPasswordConfirm(event.target.value);
   };
 
   // Showing success message
@@ -93,7 +136,7 @@ function Sign() {
           display: submitted ? "" : "none",
         }}
       >
-        <h1>User {Fname + " " + Lname} successfully registered!</h1>
+        <h1>User {firstName + " " + lastName} successfully registered!</h1>
       </div>
     );
   };
@@ -130,7 +173,7 @@ function Sign() {
           <input
             onChange={handleFName}
             className="input"
-            value={Fname}
+            value={firstName}
             type="text"
           />
           <br></br>
@@ -139,7 +182,7 @@ function Sign() {
           <input
             onChange={handleLName}
             className="input"
-            value={Lname}
+            value={lastName}
             type="text"
           />
           <br></br>
@@ -148,7 +191,7 @@ function Sign() {
           <input
             onChange={handleUserName}
             className="input"
-            value={Uname}
+            value={username}
             type="text"
           />
           <br></br>
@@ -157,7 +200,7 @@ function Sign() {
           <input
             onChange={handlePhone}
             className="input"
-            value={phoneNum}
+            value={phoneNumber}
             type="text"
           />
           <br></br>
@@ -179,18 +222,24 @@ function Sign() {
             type="password"
           />
           <br></br>
+            {/* Display the password strength error */}
+            {passwordStrengthError && (
+                <div className="password error">
+                    <div className="password-strength-error">{passwordStrengthError}</div>
+                </div>
+            )}
 
           <label className="label">Confirm password</label>
           <input
             onChange={handleConfirmPasswordChange}
             className="input"
-            value={confirmPassword}
+            value={passwordConfirm}
             type="password"
           />
           <br></br>
 
           <button onClick={next} className="btn" type="next">
-            next
+            Next
           </button>
         </form>
       </center>
