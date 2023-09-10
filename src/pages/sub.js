@@ -2,7 +2,9 @@ import { useState, useEffect, memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../design/sign.css";
 
+
 function Sub() {
+  const [message, setMessage] = useState(""); // State to store the message
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -78,20 +80,25 @@ function Sub() {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Request failed with status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((responseData) => {
-          console.log(responseData);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    }
-  };
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((responseData) => {
+        console.log(responseData);
+
+        // Update the message state with the message from the backend
+        setMessage(responseData.message);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+};
+
+ 
 
   const successMessage = () => {
     return (
@@ -136,10 +143,8 @@ function Sub() {
 
         <div>{/* Information about the subscription */}</div>
 
-        <div className="messages">
-          {errorMessage()}
-          {successMessage()}
-        </div>
+     
+
 
         <form>
           <label className="label">Company name</label>
@@ -162,6 +167,13 @@ function Sub() {
           <button onClick={handleSubmit} className="btn" type="submit">
             Submit
           </button>
+          <div className="messages">
+          {errorMessage()}
+          {successMessage()}
+
+          {/* Display the message from the backend */}
+          {message && <p>{message}</p>}
+        </div>
         </form>
       </center>
     </div>

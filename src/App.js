@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Sign from "./pages/signup";
+import Sign from "./pages/Signup";
 import Sub from "./pages/sub";
 import Dashboard from "./pages/Dashboard";
 

@@ -68,4 +68,11 @@
     font-size: 14px;
     margin-top: 10px;
   }
+  .messages{
+    color: green;
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: bolder;
+
+  }
   
