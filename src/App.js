@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import NoPage from "./pages/NoPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Sign from "./pages/Signup";
+import Sign from "./pages/signup";
 import Sub from "./pages/sub";
 import Dashboard from "./pages/Dashboard";
 
@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:5000/auth/login/success", {
+      fetch("http://localhost:3000/auth/login/success", {
         method: "GET",
         credentials: "include",
         headers: {

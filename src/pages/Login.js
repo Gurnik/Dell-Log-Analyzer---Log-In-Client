@@ -8,7 +8,7 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from "../context/AuthProvider";
 
 import axios from '../api/axios';
-const LOGIN_URL = 'http://localhost:3001/login';
+const LOGIN_URL = 'http://localhost:3000/login';
 
 
 const Login = () => {
@@ -87,11 +87,11 @@ const Login = () => {
 
 
   const google = () => {
-    window.open("http://localhost:5000/auth/google", "_self");
+    window.open("http://localhost:3001/auth/google", "_self");
   };
 
   const github = () => {
-    window.open("http://localhost:5000/auth/github", "_self");
+    window.open("http://localhost:3001/auth/github", "_self");
   };
 
   return (

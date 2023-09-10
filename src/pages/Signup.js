@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Sub from "./sub";
 import "../design/sign.css";
 
- // Function to check password strength
- const checkPasswordStrength = (password) => {
+// Function to check password strength
+const checkPasswordStrength = (password) => {
   const minLength = 8;
   const minUpperCase = 1;
   const minLowerCase = 1;
@@ -12,38 +12,41 @@ import "../design/sign.css";
   const minSpecialChars = 1;
 
   if (password.length < minLength) {
-    return 'Password must be at least 8 characters long.';
+    return "Password must be at least 8 characters long.";
   }
 
-  if (password.replace(/[^A-Z]/g, '').length < minUpperCase) {
-    return 'Password must contain at least one uppercase letter.';
+  if (password.replace(/[^A-Z]/g, "").length < minUpperCase) {
+    return "Password must contain at least one uppercase letter.";
   }
 
-  if (password.replace(/[^a-z]/g, '').length < minLowerCase) {
-    return 'Password must contain at least one lowercase letter.';
+  if (password.replace(/[^a-z]/g, "").length < minLowerCase) {
+    return "Password must contain at least one lowercase letter.";
   }
 
-  if (password.replace(/[^0-9]/g, '').length < minNumbers) {
-    return 'Password must contain at least one number.';
+  if (password.replace(/[^0-9]/g, "").length < minNumbers) {
+    return "Password must contain at least one number.";
   }
 
-  if (password.replace(/[!@#$%^&()_+\-={}\[\]:;<>,?\\~]/g, '').length < minSpecialChars) {
-    return 'Password must contain at least one special character .';
+  if (
+    password.replace(/[!@#$%^&()_+\-={}\[\]:;<>,?\\~]/g, "").length <
+    minSpecialChars
+  ) {
+    return "Password must contain at least one special character .";
   }
 
-  return 'Password is strong!'; // Password meets all criteria
+  return "Password is strong!"; // Password meets all criteria
 };
 
 function Sign() {
   // States for registration
   const navigate = useNavigate();
-  const [Fname, setFName] = useState("");
-  const [Lname, setLName] = useState("");
-  const [Uname, setUName] = useState("");
+  const [firstName, setFName] = useState("");
+  const [lastName, setLName] = useState("");
+  const [ username, setUName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNum, setPhonenun] = useState("");
+  const [phoneNumber, setPhonenun] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordConfirm, setConfirmPassword] = useState("");
 
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
@@ -95,32 +98,34 @@ function Sign() {
     setSubmitted(false);
   };
 
- // Handling the form submission
- const next = (e) => {
-  e.preventDefault();
-  if (
-    Fname === "" ||
-    phoneNum === "" ||
-    Lname === "" ||
-    Uname === "" ||
-    email === "" ||
-    password === ""
-  ) {
-  errorMessage("Please enter all the fields");
-  } else {
-  navigate('/sub',{
-  state: {
-    Fname,
-    Lname,
-    Uname,
-    email,
-    phoneNum,
-    password
-  }
-  });
-    setError(false);
-  }
-};
+  // Handling the form submission
+  const next = (e) => {
+    e.preventDefault();
+    if (
+      firstName === "" ||
+      phoneNumber === "" ||
+      lastName === "" ||
+      username === "" ||
+      email === "" ||
+      password === ""||
+      passwordConfirm===""
+    ) {
+      errorMessage("Please enter all the fields");
+    } else {
+      navigate("/sub", {
+        state: {
+          firstName,
+          lastName,
+          username,
+          password,
+          passwordConfirm,
+          email,
+          phoneNumber,
+        },
+      });
+      setError(false);
+    }
+  };
 
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
@@ -135,7 +140,7 @@ function Sign() {
           display: submitted ? "" : "none",
         }}
       >
-        <h1>User {Fname + " " + Lname} successfully registered!</h1>
+        <h1>User {firstName + " " + lastName} successfully registered!</h1>
       </div>
     );
   };
@@ -158,7 +163,7 @@ function Sign() {
       <center>
         <div>
           <h1>User Registration</h1>
-    </div>
+        </div>
 
         {/* Calling to the methods */}
         <div className="messages">
@@ -172,7 +177,7 @@ function Sign() {
           <input
             onChange={handleFName}
             className="input"
-            value={Fname}
+            value={firstName}
             type="text"
           />
           <br></br>
@@ -181,7 +186,7 @@ function Sign() {
           <input
             onChange={handleLName}
             className="input"
-            value={Lname}
+            value={lastName}
             type="text"
           />
           <br></br>
@@ -190,7 +195,7 @@ function Sign() {
           <input
             onChange={handleUserName}
             className="input"
-            value={Uname}
+            value={username}
             type="text"
           />
           <br></br>
@@ -199,7 +204,7 @@ function Sign() {
           <input
             onChange={handlePhone}
             className="input"
-            value={phoneNum}
+            value={phoneNumber}
             type="text"
           />
           <br></br>
@@ -225,7 +230,9 @@ function Sign() {
           {/* Display the password strength error */}
           {passwordStrengthError && (
             <div className="password error">
-              <div className="password-strength-error">{passwordStrengthError}</div>
+              <div className="password-strength-error">
+                {passwordStrengthError}
+              </div>
             </div>
           )}
 
@@ -233,7 +240,7 @@ function Sign() {
           <input
             onChange={handleConfirmPasswordChange}
             className="input"
-            value={confirmPassword}
+            value={passwordConfirm}
             type="password"
           />
           <br></br>
@@ -246,6 +253,5 @@ function Sign() {
     </div>
   );
 }
-
 
 export default Sign;

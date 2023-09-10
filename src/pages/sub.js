@@ -1,17 +1,22 @@
-import { useState, useEffect, memo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import '../design/sign.css';
-
-
+import { useState, useEffect, memo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../design/sign.css";
 
 function Sub() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { Fname, Lname, Uname, email, phoneNum, password } = location.state;
+  const {
+    firstName,
+    lastName,
+    username,
+    password,
+    passwordConfirm,
+    email,
+    phoneNumber,
+  } = location.state;
 
-
-  const [company, setCompany] = useState('');
-  const [sub, setSub] = useState('');
+  const [companyName, setCompany] = useState("");
+  const [sub, setSub] = useState("");
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
@@ -19,26 +24,23 @@ function Sub() {
 
   useEffect(() => {
     if (isNavigatingBack) {
-      console.log('Navigating back detected');
-      navigate('/sub', { replace: true });
+      console.log("Navigating back detected");
+      navigate("/sub", { replace: true });
     }
   }, [isNavigatingBack]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      console.log('Before unload event fired');
+      console.log("Before unload event fired");
       setIsNavigatingBack(true);
     };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-  
-  
-
 
   const handleCompany = (e) => {
     setCompany(e.target.value);
@@ -52,37 +54,41 @@ function Sub() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (company === '' || sub === '') {
-      setError('Please enter all the fields');
+    if (companyName=== "" || sub === "") {
+      setError("Please enter all the fields");
     } else {
       // Assuming you have a backend URL to send data
-      const url = 'http://localhost:3001/signup'; // Replace with your actual backend URL
+      const url = "http://localhost:3001/signup"; // Replace with your actual backend URL
       const data = {
-        Fname,
-        Lname,
-        Uname,
+        firstName,
+        lastName,
+        username,
         email,
-        phoneNum,
+        phoneNumber,
         password,
-        company,
-        sub
+        passwordConfirm,
+        companyName,
+        sub,
       };
 
       fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Request failed with status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((responseData) => {
-          // Handle response from the backend if needed
-          console.log(data)
+          console.log(responseData);
         })
         .catch((error) => {
-          // Handle error
-          console.error('Error sending data to backend:', error);
+          console.error("Error:", error);
         });
     }
   };
@@ -92,10 +98,12 @@ function Sub() {
       <div
         className="success"
         style={{
-          display: submitted ? '' : 'none',
+          display: submitted ? "" : "none",
         }}
       >
-        <h1>User {Fname} {Lname} successfully registered</h1>
+        <h1>
+          User {firstName} {lastName} successfully registered
+        </h1>
       </div>
     );
   };
@@ -105,33 +113,28 @@ function Sub() {
       <div
         className="error"
         style={{
-          display: error ? '' : 'none',
+          display: error ? "" : "none",
         }}
       >
         <h1>{message}</h1>
       </div>
     );
   };
-  
-  console.log({Fname});
-  console.log({Lname});
-  console.log({Uname});
-  console.log({phoneNum});
-  console.log({email});
-  
 
+  console.log({ firstName });
+  console.log({ lastName });
+  console.log({ username });
+  console.log({ phoneNumber });
+  console.log({ email });
 
   return (
-    
     <div className="container">
       <center>
         <div>
           <h1>Buy Subscription</h1>
         </div>
 
-        <div>
-          {/* Information about the subscription */}
-        </div>
+        <div>{/* Information about the subscription */}</div>
 
         <div className="messages">
           {errorMessage()}
@@ -143,7 +146,7 @@ function Sub() {
           <input
             onChange={handleCompany}
             className="input"
-            value={company}
+            value={companyName}
             type="text"
           />
           <br />
